@@ -2,7 +2,7 @@ const db=firebase.firestore()
 const newBtn = document.getElementById('newBtn')
 const indexBtn= document.getElementById('indexBtn')
 
-
+//function to show the form when new button clicked
 function showForm(){
   const form= document.getElementById('myForm')
   if(form.style.display==='none'){
@@ -11,6 +11,50 @@ function showForm(){
     form.style.display='none';
   }
 }
+//function to make sure name is inputed
+function nameLen(){
+  const name=document.getElementById('name');
+  const nameValue=name.value
+  if (nameValue===''){
+    alert('must enter text')
+  } else{
+    name.value=''
+  }
+}
+//function email pattern
+
+///put all of this under the submit function for when you press the submit button
+
+
+//function limit phone number to 10 digits
+function phoneLength(){
+  const phoneNum=document.getElementById('phone');
+  const phoneLen=phoneNum.length;
+  if (phoneLen===10){
+    phoneLen.value='';
+  } else{
+    alert('Phone number must be 10 digits long')
+  }
+  const phoneValue=phoneNum.value;
+  const check0=phoneValue.startsWith(0);
+  const check1=phoneValue.startsWith(1);
+  if (phoneValue===check0){
+    alert('cannot start with 0')
+  } else{
+    phoneValue='';
+  }
+  if (phoneValue===check1){
+    alert('cannot start with 1')
+  } else{
+    phoneValue='';
+  }
+}
+
+
+//firebase submit??
+
+
+
 /*
 const dbCollection = firebase.firestore().collection('todos')
 
