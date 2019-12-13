@@ -5,39 +5,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Course Project</title>
-    <link stylesheet="styles.css">
+    <link rel="stylesheet" type="text/css" href="styles.css"/>
+
 </head>
 <body>
-    <div id="topDiv" class="header">
+    <div id="topDiv" class="header" >
         <h1>Contact Management</h1>
-        <button onclick="showForm()" id="newBtn">New</button>
-        <button id="indexBtn">Index</button>
+        <button id="newBtn" onclick="showForm()" >New</button>
+        <button id="indexBtn" onclick="index()" >Index</button>
     </div>
     
-    <form id="myForm" style="display:none;">
+    <div id="myForm" style="display:none;" >
         <h2>New Contact</h2>
         <label>Name:</label><br>
-        <input type="text" id="name"/><br>
+        <input type="text" id="name" autofocus/><br>
         <label>Email:</label><br>
-        <input type="text" id="email"/><br>
+        <input type="text" id="email" placeholder='username@server.domain' required pattern="username@server.domain"/><br>
         <label>Phone:</label><br>
-        <input type="text" id="phone"/><br>
-        <button type="button" id="submit">Submit</button>
-    </form>
+        <input type="text" id="phone" maxlength="10" minlength="10" placeholder='Must be 10 characters and not start with 0 or 1'/><br>
+        <button class="submit" onclick="submitForm()" id="submit" value="submit">Submit</button>
+    </div>
 
-    <ul id="myUL">
-        <!--Contact List Items-->
-    </ul>
+    <div id="inputData" style='display: none;'>
+            <h3>Contact</h3>
+                    <label>Name:</label>
+                    <p id="nameDetail"></p>
+                    <label>Email:</label>
+                    <p id="emailDetail"></p>
+                    <label>Phone:</label>
+                    <p id="phoneDetail"></p>
+                    <button id="edit" onclick="editFunction()">Edit</button>
+                    <button id="delete" onclick="deleteFunction()">Delete</button>
+    </div>
+    
+    <div id='indexTable' style='display:none;' >
+    <table id='indexTableBody' style='width:75%'>
+        <h4>Contact List</h4>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+        </tr>
+            <tr>     
+            <td id="contact#"></td>
+            <td id="indexofName"></td>
+            <td id="indexofEmail"></td>
+            <td id="indexofPhone"></td>
+            <td><button id="detailsTableButton">Details</button></td>
+            <td><button id="editTableButton">Edit</button></td>
+            <td><button id="deleteTableButton">Delete</button></td>
+        </tr>
+    </table>
+</div>
 
-<!-- The core Firebase JS SDK is always required and must be listed first -->
-<script src="/__/firebase/7.5.0/firebase-app.js"></script>
-
-<!-- TODO: Add SDKs for Firebase products that you want to use
-     https://firebase.google.com/docs/web/setup#available-libraries -->
-
-<!-- Initialize Firebase -->
-<script src="/__/firebase/init.js"></script>
     <script src="app.js"></script>
+
 
     
 </body>

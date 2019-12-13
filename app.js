@@ -1,6 +1,11 @@
-const db=firebase.firestore()
-const newBtn = document.getElementById('newBtn')
-const indexBtn= document.getElementById('indexBtn')
+//check HTML5 storage support
+function _support_html5_storage(){
+  try{
+    return 'localStorage' in window && window['localStorage'] !== null;
+  } catch (e) {
+    return false;
+  }
+}
 
 //function to show the form when new button clicked
 function showForm(){
@@ -11,150 +16,123 @@ function showForm(){
     form.style.display='none';
   }
 }
-//function to make sure name is inputed
-function nameLen(){
-  const name=document.getElementById('name');
-  const nameValue=name.value
-  if (nameValue===''){
-    alert('must enter text')
-  } else{
-    name.value=''
+//variables of the text inputs
+const nameInp=document.getElementById('name');
+const emailInp=document.getElementById('email');
+const phoneNumInp=document.getElementById('phone');
+//variables of the input
+const nameDetail=document.getElementById('nameDetail');
+const emailDetail=document.getElementById('emailDetail');
+const phoneDetail=document.getElementById('phoneDetail');
+//variables of the table elements
+const indexofName=document.getElementById('indexofName');
+const indexofEmail=document.getElementById('indexofEmail');
+const indexofPhone=document.getElementById('indexofPhone');
+const indexTable= document.getElementById('indexTable')
+const indexTableBody=document.getElementById('indexTableBody');
+//new Array
+const myArray=[];
+
+
+
+//function to save the inputs 
+function submitForm(){
+  
+  //function
+  if(nameInp.value===""){
+    alert('fill out name')
   }
+  else if(emailInp===""){
+    alert('fill out email')
+  }
+  else if(phoneNumInp===""){
+    alert('fill out phone number')
+  }
+  else{
+  //saving name to localStorage
+  localStorage.setItem('name',nameInp.value);
+  //saving email to localStorage
+  localStorage.setItem('email',emailInp.value);
+  //saving phone to localStorage
+  localStorage.setItem('phoneNum',phoneNumInp.value);
+  //writing the localStorage to the html page
+  nameDetail.innerHTML=localStorage.getItem('name');
+  emailDetail.innerHTML=localStorage.getItem('email');
+  phoneDetail.innerHTML=localStorage.getItem('phoneNum');
+
+  //only displays data when submit is pressed
+  const contact= document.getElementById('inputData')
+  if(contact.style.display==='none'){
+    contact.style.display='block';
+  }else{
+    contact.style.display='none';
+  }
+  }
+
+  myArray.push(nameInp.value,emailInp.value,phoneNumInp.value);
+  localStorage.myArray+=JSON.stringify({'name':nameInp.value, 'email':emailInp.value, 'phoneNum':phoneNumInp.value});
+
+  
+
+//inside the function it adds every time you press submit//
+//outside the function, it saves the data even when you press refresh
+//but it only shows the last entry
+//need to use data from the array. then whne i click delete it will actually delete storage
+    const row=document.createElement('tr');
+    const tdNum=document.createElement('td');
+    const td1=document.createElement('td');
+    const td2=document.createElement('td');
+    const td3=document.createElement('td');
+    tdNum.innerHTML=localStorage.getItem('name'); //supposed to be the number!
+    td1.innerHTML=localStorage.getItem('name');
+    td2.innerHTML=localStorage.getItem('email');
+    td3.innerHTML=localStorage.getItem('phoneNum');
+    row.appendChild(td1);
+    row.appendChild(td2)
+    row.appendChild(td3);
+    indexTableBody.children[0].appendChild(row);
+  
+  nameInp.value='';
+  emailInp.value='';
+  phoneNumInp.value='';
+ }
+
+
+
+function editFunction(){
+    localStorage.clear();
 }
-//function email pattern
-
-///put all of this under the submit function for when you press the submit button
-
-
-//function limit phone number to 10 digits
-function phoneLength(){
-  const phoneNum=document.getElementById('phone');
-  const phoneLen=phoneNum.length;
-  if (phoneLen===10){
-    phoneLen.value='';
-  } else{
-    alert('Phone number must be 10 digits long')
-  }
-  const phoneValue=phoneNum.value;
-  const check0=phoneValue.startsWith(0);
-  const check1=phoneValue.startsWith(1);
-  if (phoneValue===check0){
-    alert('cannot start with 0')
-  } else{
-    phoneValue='';
-  }
-  if (phoneValue===check1){
-    alert('cannot start with 1')
-  } else{
-    phoneValue='';
-  }
-}
-
-
-//firebase submit??
-
-
-
-/*
-const dbCollection = firebase.firestore().collection('todos')
-
-const input = document.getElementById('myInput')
-const addBtn = document.getElementById('addBtn')
-const todoList = document.getElementById('myUL')
-
-const ENTER_KEY_CODE = 13
-input.addEventListener('keyup', event => {
-  if (event.keyCode === ENTER_KEY_CODE) {
-    appendTodo()
-  }
-})
-
-addBtn.addEventListener('click', appendTodo)
-
-todoList.addEventListener('click', handleTodoClick)
-
-dbCollection.onSnapshot(docs => {
-  todoList.innerHTML = ''
-  docs.forEach(doc => createItemFromData(doc))
-})
-
-function appendTodo() {
-  const inputValue = input.value
-  if (inputValue === '') {
-    alert('Todo cannot be empty')
-  } else {
-    input.value = ''
-    saveTodo(inputValue)
-  }
-}
-
-function saveTodo(todoText) {
-  dbCollection
-    .add({
-      task: todoText,
-      checked: false,
-      timestamp: Date.now(),
-    })
-    .then(function(docRef) {
-      console.log('Document written with ID: ', docRef.id)
-    })
-    .catch(function(error) {
-      console.error('Error adding document: ', error)
-    })
-}
-
-function createItemFromData(doc) {
-  const refid = doc.id
-  const data = doc.data()
-  const todoItem = document.createElement('li')
-
-  // set ref id
-  todoItem.setAttribute('data-refid', refid)
-
-  // save and set the checked class
-  if (data.checked) {
-    todoItem.setAttribute('data-checked', 'checked')
-    todoItem.classList.add('checked')
+//function to show contacts in table form
+function index(){
+  //only displays table when index is pressed)
+  if(indexTable.style.display==='none'){
+    indexTable.style.display='block';
+  }else{
+    indexTable.style.display='none';
   }
 
-  // the todo text content
-  const todo = document.createTextNode(data.task)
-  todoItem.appendChild(todo)
-
-  // the close symbol
-  const span = document.createElement('SPAN')
-  const txt = document.createTextNode('X')
-  span.className = 'close'
-  span.appendChild(txt)
-  todoItem.appendChild(span)
-
-  todoList.appendChild(todoItem)
 }
 
-function handleTodoClick(event) {
-  const target = event.target
-  if (target.tagName === 'LI') {
-    toggleChecked(target)
-  } else if (target.tagName === 'SPAN') {
-    const item = target.parentElement
-    removeItem(item)
+//deleting item
+function deleteFunction(){
+    const removed=myArray.splice('name',nameInp)
+    localStorage.removeItem('name');
+    localStorage.removeItem('email');
+    localStorage.removeItem('phoneNum');
+    return '';
   }
-}
+  //editing contact
 
-function toggleChecked(listItem) {
-  const refid = listItem.dataset.refid
-  const docRef = dbCollection.doc(refid)
-  if (listItem.dataset.checked === 'checked') {
-    docRef.update({ checked: false })
-  } else {
-    docRef.update({ checked: true })
-  }
-}
 
-function removeItem(listItem) {
-  const refid = listItem.dataset.refid
-  const docRef = dbCollection.doc(refid)
-  docRef.delete()
-}
 
-*/
+
+
+//local storage push items in to the array?
+
+
+
+//extra things
+//make sure name is capitilized
+//using required on the input spot so it has to be filled out instead of writing code for it 
+//.indexof for the email
+//put the contact inputs of the same line in the html
